@@ -1,24 +1,39 @@
 import { Devs } from "@utils/constants";
-import definePlugin from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
 import "./style.css";
+import { definePluginSettings } from "@api/Settings";
 
+const settings = definePluginSettings({
+    hoverToView: {
+        type: OptionType.BOOLEAN,
+        description: "When hovering over a message, show the contents.",
+        default: false,
+        restartNeeded: false,
+        onChange: () => {
+            hoverToViewRegister();
+        }
+    },
+});
 
 export default definePlugin({
     name: "Don't Leak!",
     description: "Hide all message contents and attachments when you're streaming or sharing your screen.",
-    authors: [
-        {
-            id: 1101508982570504244n,
-            name: "Perny",
-        },
-    ],
-    patches: [],
+    authors: [Devs.Perny],
+    settings,
     start() {
         document.addEventListener("keyup", keyUpHandler);
         document.addEventListener("keydown", keyDownHandler);
+        hoverToViewRegister();
     },
-    stop() { },
 });
+
+function hoverToViewRegister() {
+    if (settings.store.hoverToView) {
+        document.body.classList.add("hoverToView");
+        return;
+    }
+    document.body.classList.remove("hoverToView");
+}
 
 function keyUpHandler(e: KeyboardEvent) {
     if (e.key !== "Insert") return;

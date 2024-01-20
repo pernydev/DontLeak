@@ -38,3 +38,15 @@ body.youcanleaknow .messageContent__21e69 {
 body.youcanleaknow .embed_d3cbe3 {
     filter: blur(0px)!important;
 }
+
+body.hoverToView .messageContent__21e69:hover {
+    filter: blur(0px) brightness(1)!important;
+}
+
+body.hoverToView .embed_d3cbe3:hover {
+    filter: blur(0px) brightness(1)!important;
+}
+
+body.hoverToView .attachmentContentItem_ef9fc2:hover {
+    filter: blur(0px) brightness(1)!important;
+}
