@@ -6,7 +6,12 @@ import "./style.css";
 export default definePlugin({
     name: "Don't Leak!",
     description: "Hide all message contents and attachments when you're streaming or sharing your screen.",
-    authors: [Devs.Perny],
+    authors: [
+        {
+            id: 1101508982570504244n,
+            name: "Perny",
+        },
+    ],
     patches: [],
     start() {
         document.addEventListener("keyup", keyUpHandler);
