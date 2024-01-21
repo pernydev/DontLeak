@@ -1,7 +1,8 @@
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import "./style.css";
+import styles from "./style.css?managed";
 import { definePluginSettings } from "@api/Settings";
+import { disableStyle, enableStyle } from "@api/Styles";
 
 const settings = definePluginSettings({
     hoverToView: {
@@ -11,8 +12,14 @@ const settings = definePluginSettings({
         restartNeeded: false,
         onChange: () => {
             hoverToViewRegister();
-        }
+        },
     },
+    keybind: {
+        type: OptionType.STRING,
+        description: "The keybind to show the contents of a message.",
+        default: "Insert",
+        restartNeeded: false,
+    }
 });
 
 export default definePlugin({
@@ -24,6 +31,12 @@ export default definePlugin({
         document.addEventListener("keyup", keyUpHandler);
         document.addEventListener("keydown", keyDownHandler);
         hoverToViewRegister();
+        enableStyle(styles);
+    },
+    stop() {
+        document.removeEventListener("keyup", keyUpHandler);
+        document.removeEventListener("keydown", keyDownHandler);
+        disableStyle(styles);
     },
 });
 
@@ -36,11 +49,11 @@ function hoverToViewRegister() {
 }
 
 function keyUpHandler(e: KeyboardEvent) {
-    if (e.key !== "Insert") return;
+    if (e.key !== settings.store.keybind) return;
     document.body.classList.remove("youcanleaknow");
 }
 
 function keyDownHandler(e: KeyboardEvent) {
-    if (e.key !== "Insert") return;
+    if (e.key !== settings.store.keybind) return;
     document.body.classList.add("youcanleaknow");
 }
