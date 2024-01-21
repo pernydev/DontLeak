@@ -11,7 +11,7 @@ const settings = definePluginSettings({
         default: false,
         restartNeeded: false,
         onChange: () => {
-            hoverToViewRegister();
+            updateClassList("hoverToView", settings.store.hoverToView);
         },
     },
     keybind: {
@@ -19,7 +19,16 @@ const settings = definePluginSettings({
         description: "The keybind to show the contents of a message.",
         default: "Insert",
         restartNeeded: false,
-    }
+    },
+    enableForStream: {
+        type: OptionType.BOOLEAN,
+        description: "Blur all messages in streamer mode.",
+        default: false,
+        restartNeeded: false,
+        onChange: () => {
+            updateClassList("hideinstreamermode", settings.store.enableForStream);
+        },
+    },
 });
 
 export default definePlugin({
@@ -35,7 +44,8 @@ export default definePlugin({
     start() {
         document.addEventListener("keyup", keyUpHandler);
         document.addEventListener("keydown", keyDownHandler);
-        hoverToViewRegister();
+        updateClassList("hoverToView", settings.store.hoverToView);
+        updateClassList("hideinstreamermode", settings.store.enableForStream);
         enableStyle(styles);
     },
     stop() {
@@ -45,12 +55,12 @@ export default definePlugin({
     },
 });
 
-function hoverToViewRegister() {
-    if (settings.store.hoverToView) {
-        document.body.classList.add("hoverToView");
+function updateClassList(className, condition) {
+    if (condition) {
+        document.body.classList.add(className);
         return;
     }
-    document.body.classList.remove("hoverToView");
+    document.body.classList.remove(className);
 }
 
 function keyUpHandler(e: KeyboardEvent) {
