@@ -1,8 +1,27 @@
-import { Devs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
-import styles from "./style.css?managed";
+/*
+ * Vencord, a modification for Discord's desktop app
+ * Copyright (c) 2022 Vendicated and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
+import { Devs } from "@utils/constants";
+import definePlugin, { OptionType } from "@utils/types";
+
+import styles from "./style.css?managed";
 
 const settings = definePluginSettings({
     hoverToView: {
@@ -11,7 +30,8 @@ const settings = definePluginSettings({
         default: false,
         restartNeeded: false,
         onChange: () => {
-            updateClassList("hoverToView", settings.store.hoverToView);
+            console.log(settings.store.hoverToView);
+            updateClassList("hover-to-view", settings.store.hoverToView);
         },
     },
     keybind: {
@@ -26,26 +46,22 @@ const settings = definePluginSettings({
         default: false,
         restartNeeded: false,
         onChange: () => {
-            updateClassList("hideinstreamermode", settings.store.enableForStream);
+            console.log(settings.store.enableForStream);
+            updateClassList("hide-in-streamer-mode", settings.store.enableForStream);
         },
     },
 });
 
 export default definePlugin({
-    name: "Don't Leak!",
+    name: "Do Not Leak!",
     description: "Hide all message contents and attachments when you're streaming or sharing your screen.",
-    authors: [
-        {
-            id: 1101508982570504244n,
-            name: "Perny",
-        },
-    ],
+    authors: [Devs.Perny],
     settings,
     start() {
         document.addEventListener("keyup", keyUpHandler);
         document.addEventListener("keydown", keyDownHandler);
-        updateClassList("hoverToView", settings.store.hoverToView);
-        updateClassList("hideinstreamermode", settings.store.enableForStream);
+        updateClassList("hover-to-view", settings.store.hoverToView);
+        updateClassList("hide-in-streamer-mode", settings.store.enableForStream);
         enableStyle(styles);
     },
     stop() {
@@ -57,18 +73,18 @@ export default definePlugin({
 
 function updateClassList(className, condition) {
     if (condition) {
-        document.body.classList.add(className);
+        document.body.classList.add(`vc-dnl-${className}`);
         return;
     }
-    document.body.classList.remove(className);
+    document.body.classList.remove(`vc-dnl-${className}`);
 }
 
 function keyUpHandler(e: KeyboardEvent) {
     if (e.key !== settings.store.keybind) return;
-    document.body.classList.remove("youcanleaknow");
+    updateClassList("show-messages", false);
 }
 
 function keyDownHandler(e: KeyboardEvent) {
     if (e.key !== settings.store.keybind) return;
-    document.body.classList.add("youcanleaknow");
+    updateClassList("show-messages", true);
 }
