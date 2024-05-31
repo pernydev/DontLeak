@@ -93,16 +93,24 @@ filter: blur(0px) brightness(1) !important;
 */
 
 export function getStyle(): [string, object] {
-    const t = findByProps("messageEditorCompact"); // ["messageContent","wrapper"]
-    const v = findByProps("embedWrapper");
-    const u = findByProps("visualMediaItemContainer");
-    const l = findByProps("colorStreamerMode", "notice");
-    const o = findByProps("actionButtons", "buttonActive", "wrapper");
-    const f = findByProps("sidebar", "panels");
-    const Classes = Object.assign({}, o, l, u, v, t, f);
-    let CssCode = CssFormatCode;
-    for (const className in Classes) {
-        CssCode = CssCode.replaceAll(`{${className}}`, Classes[className]);
-    }
-    return [CssCode, Classes];
+  const messageContent = findByProps("messageEditorCompact"); // ["messageContent","wrapper"]
+  const embedWrapper = findByProps("embedWrapper");
+  const mediaContainer = findByProps("visualMediaItemContainer");
+  const notice = findByProps("colorStreamerMode", "notice");
+  const actionBar = findByProps("actionButtons", "buttonActive", "wrapper");
+  const sidebar = findByProps("sidebar", "panels");
+  const Classes = Object.assign(
+    {},
+    actionBar,
+    notice,
+    mediaContainer,
+    embedWrapper,
+    messageContent,
+    sidebar
+  );
+  let CssCode = CssFormatCode;
+  for (const className in Classes) {
+    CssCode = CssCode.replaceAll(`{${className}}`, Classes[className]);
+  }
+  return [CssCode, Classes];
 }
