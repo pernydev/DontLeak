@@ -10,7 +10,6 @@ import definePlugin, { OptionType } from "@utils/types";
 
 import { getStyle } from "./style";
 
-
 const settings = definePluginSettings({
     hoverToView: {
         type: OptionType.BOOLEAN,
@@ -33,7 +32,10 @@ const settings = definePluginSettings({
         default: false,
         onChange: () => {
             console.log(settings.store.enableForStream);
-            updateClassList("hide-in-streamer-mode", settings.store.enableForStream);
+            updateClassList(
+                "hide-in-streamer-mode",
+                settings.store.enableForStream
+            );
         },
     },
 });
@@ -46,7 +48,7 @@ export default definePlugin({
     settings,
     start() {
         const styles = getStyle();
-
+  
         const style = document.createElement("style");
         style.setAttribute("id", "vc-dont-leak-style");
         style.innerHTML = styles;
