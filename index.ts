@@ -40,6 +40,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "DoNotLeak!",
+    tags: ["DontLeak"],
     description:
         "Hide all message contents and attachments when you're streaming or sharing your screen.",
     authors: [Devs.Perny],
